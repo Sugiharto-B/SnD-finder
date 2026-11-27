@@ -55,8 +55,12 @@ try:
     # SUPPLY & DEMAND SEDERHANA
     st.subheader("📦 Zona Supply & Demand Terdekat")
        # === SnD BENERAN TANPA DEF ===
+    df['tutup'] = df['close']
+    df['membuka'] = df['open']
+    df['tinggi'] = df['high']
+    df['rendah'] = df['low']
     df['body'] = df['tutup'] - df['membuka']
-    df['body'] = df['body'].abs()
+    df['body'] = df['body'].abs()    
     avg_body = df['body'].mean()
     demand_zones = []
     supply_zones = []
