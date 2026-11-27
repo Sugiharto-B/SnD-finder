@@ -84,8 +84,28 @@ try:
         st.write("📉 Trend di bawah Pivot - Cenderung Bearish")
 
     st.subheader("📈 Grafik Harga Terakhir + Zona SnD")
-
+    # --- SnD OTOMATIS PINTER - Cari Demand Kuat Sendiri ---
     fig = go.Figure()
+    df_100 = df.tail(100).copy()
+    # Cari Swing Low: low paling rendah dibanding 5 kiri + 5 kanan
+    df_100['swing_low'] = df_100['low'] == df_100['low'].rolling(11, center=True).min()
+    swing_lows = df_100[df_100['swing_low'] == True]
+    # Ambil Swing Low terakhir yang masih fresh (harga belum jebol ke bawahnya)
+        demand_kuat = None
+    for i in range(len(swing_lows)-1, -1, -1):
+        low_c = swing_lows.iloc[i]['low']
+        # Cek apakah harga sekarang masih di atas low ini (belum jebol)
+        if df['close'].iloc[-1] > low_c:
+            demand_kuat = swing_lows.iloc[i]
+            break
+    if demand_kuat is not None:
+        kuat_low = demand_kuat['low']
+        kuat_high = max(demand_kuat['open'], demand_kuat['close'])
+        fig.add_hrect(y0=kuat_low, y1=kuat_high, fillcolor="green", opacity=0.3, line_width=0)
+        fig.add_annotation(x=df["time"].iloc[-1], y=kuat_high, text=f"DEMAND KUAT OTOMATIS {kuat_low:.3f}", showarrow=False, font=dict(color="white", size=10), bgcolor="green")
+    else:
+        fig.add_annotation(x=df["time"].iloc[-1], y=df['close'].iloc[-1], text="SEMUA DEMAND JEBOL - WAIT!", showarrow=False, font=dict(color="white", size=10), bgcolor="red")
+    
     fig.add_trace(go.Scatter(x=df["time"], y=df["close"], mode='lines', name='Harga', line=dict(color='black')))
     fig.add_hrect(y0=rendah_20, y1=tinggi_demand, fillcolor="green", opacity=0.35, line_width=0)
     fig.add_hrect(y0=rendah_supply, y1=tinggi_20, fillcolor="red", opacity=0.35, line_width=0) 
