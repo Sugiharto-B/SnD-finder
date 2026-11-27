@@ -73,8 +73,15 @@ try:
     else:
         st.write("📉 Trend di bawah Pivot - Cenderung Bearish")
 
-    st.subheader("📈 Grafik Harga Terakhir")
-    st.line_chart(df.set_index("time")["close"].tail(100))
+    st.subheader("📈 Grafik Harga Terakhir + Zona SnD")
+import plotly.graph_objects as go
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=df["time"], y=df["close"], mode='lines', name='Harga', line=dict(color='white')))
+fig.add_hrect(y0=low_20, y1=low_20*1.01, fillcolor="green", opacity=0.35, line_width=0, annotation_text="DEMAND")
+fig.add_hrect(y0=high_20*0.99, y1=high_20, fillcolor="red", opacity=0.35, line_width=0, annotation_text="SUPPLY")
+fig.add_hline(y=harga_now, line_dash="dash", line_color="yellow")
+fig.update_layout(template="plotly_dark", height=400)
+st.plotly_chart(fig, use_container_width=True)
 
     st.subheader("📋 Data Terakhir")
     st.dataframe(df[["time","open","high","low","close","volume"]].tail(10).sort_values("time", ascending=False), use_container_width=True)
