@@ -54,17 +54,31 @@ try:
 
     # SUPPLY & DEMAND SEDERHANA
     st.subheader("📦 Zona Supply & Demand Terdekat")
-    # Demand = Low terendah 20 candle terakhir
-    low_20 = df.tail(20)["low"].min()
-    high_20 = df.tail(20)["high"].max()
-    # Cari zona
-    st.success(f"🟢 DEMAND (Beli) di sekitar: {low_20:,.4f} - {low_20*1.005:,.4f}")
-    st.error(f"🔴 SUPPLY (Jual) di sekitar: {high_20*0.995:,.4f} - {high_20:,.4f}")
+    # === SnD BENERAN - Zona Otomatis dari Candle Base ===
+df['body'] = abs(df['menutup'] - df['membuka'])
+avg_body = df['body'].mean()
 
-    jarak_ke_demand = ((harga_now - low_20) / low_20) * 100
-    jarak_ke_supply = ((high_20 - harga_now) / harga_now) * 100
+def cari_zona(df):
+    demand_zones = []
+    supply_zones = []
+    for i in range(3, len(df)-1):
+        is_up = df['menutup'].iloc[i] > df['membuka'].iloc[i] and df['body'].iloc[i] > 1.5 * avg_body
+        is_down = df['menutup'].iloc[i] < df['membuka'].iloc[i] and df['body'].iloc[i] > 1.5 * avg_body
+        base = df.iloc[i-3:i]
+        base_kecil = (base['body'] < avg_body).all()
+        if is_up and base_kecil:
+            demand_zones.append((base['rendah'].min(), base['tinggi'].max()))
+        if is_down and base_kecil:
+            supply_zones.append((base['rendah'].min(), base['tinggi'].max()))
+    return demand_zones, supply_zones
 
-    st.info(f"Jarak Harga ke Demand: {jarak_ke_demand:.2f}% | Jarak ke Supply: {jarak_ke_supply:.2f}%")
+demand_zones, supply_zones = cari_zona(df)
+rendah_20, tinggi_demand = demand_zones[-1] if demand_zones else (df['rendah'].min(), df['rendah'].min())
+rendah_supply, tinggi_20 = supply_zones[-1] if supply_zones else (df['tinggi'].max(), df['tinggi'].max())
+
+jarak_ke_demand = (harga_sekarang - tinggi_demand)
+jarak_ke_supply = (rendah_supply - harga_sekarang)
+st.informasi(f"Jarak Harga ke Demand:{jarak_ke_demand}")
 
     if abs(harga_now - pivot) < (H-L)*0.05:
         st.warning("⚠️ Harga sedang di area PIVOT - Hati-hati, biasanya mantul / jebol!")
