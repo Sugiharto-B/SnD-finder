@@ -89,7 +89,11 @@ try:
     fig.add_trace(go.Scatter(x=df["time"], y=df["close"], mode='lines', name='Harga', line=dict(color='black')))
     fig.add_hrect(y0=rendah_20, y1=tinggi_demand, fillcolor="green", opacity=0.35, line_width=0)
     fig.add_hrect(y0=rendah_supply, y1=tinggi_20, fillcolor="red", opacity=0.35, line_width=0) 
-    fig.add_hline(y=harga_now, line_dash="dash", line_color="yellow")
+    # Garis tengah antara Demand & Supply
+    fig.add_trace(go.Scatter(x=[df['datetime'].iloc[0], df['datetime'].iloc[-1]], y=[(permintaan_tinggi + pasokan_rendah)/2, (permintaan_tinggi + pasokan_rendah)/2], mode="lines", line=dict(color="white", dash="dash", width=2), name="Tengah"))
+
+# Segitiga kuning harga sekarang
+    fig.add_trace(go.Scatter(x=[df['datetime'].iloc[-1]], y=[harga_sekarang], mode="markers", marker=dict(symbol="triangle-right", size=18, color="yellow", line=dict(color="black", width=1)), name="Harga Sekarang"))
     fig.update_layout(template="plotly_dark", height=400)
     st.plotly_chart(fig, use_container_width=True)
 
