@@ -105,7 +105,21 @@ try:
         fig.add_annotation(x=df["time"].iloc[-1], y=kuat_high, text=f"DEMAND KUAT OTOMATIS {kuat_low:.3f}", showarrow=False, font=dict(color="white", size=10), bgcolor="green")
     else:
         fig.add_annotation(x=df["time"].iloc[-1], y=df['close'].iloc[-1], text="SEMUA DEMAND JEBOL - WAIT!", showarrow=False, font=dict(color="white", size=10), bgcolor="red")
-    
+    # --- Supply OTOMATIS PINTER - Cari Supply Kuat Sendiri ---
+    df_100_s = df.tail(100).copy()
+    df_100_s['swing_high'] = df_100_s['high'] == df_100_s['high'].rolling(11, center=True).max()
+    swing_highs = df_100_s[df_100_s['swing_high'] == True]
+    supply_kuat = None
+    for i in range(len(swing_highs)-1, -1, -1):
+        high_c = swing_highs.iloc[i]['high']
+        if df['close'].iloc[-1] < high_c:
+            supply_kuat = swing_highs.iloc[i]
+            break
+    if supply_kuat is not None:
+        s_high = supply_kuat['high']
+        s_low = min(supply_kuat['open'], supply_kuat['close'])
+        fig.add_hrect(y0=s_low, y1=s_high, fillcolor="red", opacity=0.3, line_width=0)
+        fig.add_annotation(x=df["time"].iloc[-1], y=s_high, text=f"SUPPLY KUAT OTOMATIS {s_high:.3f}", showarrow=False, font=dict(color="white", size=10), bgcolor="red")    
     fig.add_trace(go.Scatter(x=df["time"], y=df["close"], mode='lines', name='Harga', line=dict(color='black')))
     fig.add_hrect(y0=rendah_20, y1=tinggi_demand, fillcolor="green", opacity=0.35, line_width=0)
     fig.add_hrect(y0=rendah_supply, y1=tinggi_20, fillcolor="red", opacity=0.35, line_width=0) 
