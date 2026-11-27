@@ -90,7 +90,7 @@ try:
     fig.add_hrect(y0=rendah_20, y1=tinggi_demand, fillcolor="green", opacity=0.35, line_width=0)
     fig.add_hrect(y0=rendah_supply, y1=tinggi_20, fillcolor="red", opacity=0.35, line_width=0) 
     # Garis tengah antara Demand & Supply
-    fig.add_trace(go.Scatter(x=[df["time"].iloc[0], df["time"].iloc[-1]], y=[(tinggi_demand + rendah_supply)/2, (tinggi_demand + rendah_supply)/2], mode="lines", line=dict(color="white", dash="dash", width=2), name="Tengah"))
+    fig.add_trace(go.Scatter(x=[df["time"].iloc[0], df["time"].iloc[-1]], y=[(tinggi_demand + rendah_supply)/2, (tinggi_demand + rendah_supply)/2], mode="lines", line=dict(color="black", dash="dash", width=2), name="Tengah"))
 # Segitiga kuning harga sekarang
     fig.add_trace(go.Scatter(x=[df["time"].iloc[-1]], y=[harga_now], mode="markers", marker=dict(symbol="triangle-right", size=18, color="yellow", line=dict(color="black", width=1)), name="Harga Sekarang"))
 
