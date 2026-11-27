@@ -119,7 +119,23 @@ try:
         s_high = supply_kuat['high']
         s_low = min(supply_kuat['open'], supply_kuat['close'])
         fig.add_hrect(y0=s_low, y1=s_high, fillcolor="red", opacity=0.3, line_width=0)
-        fig.add_annotation(x=df["time"].iloc[-1], y=s_high, text=f"SUPPLY KUAT OTOMATIS {s_high:.3f}", showarrow=False, font=dict(color="white", size=10), bgcolor="red")    
+        fig.add_annotation(x=df["time"].iloc[-1], y=s_high, text=f"SUPPLY KUAT OTOMATIS {s_high:.3f}", showarrow=False, font=dict(color="white", size=10), bgcolor="red") 
+            # --- ALARM OTOMATIS - Kalo Udah Deket Zone ---
+    harga_skrg = df['close'].iloc[-1]
+    pesan_alarm = ""
+    warna_alarm = "gray"
+    if supply_kuat is not None:
+        jarak_supply = (supply_kuat['high'] - harga_skrg) / harga_skrg * 100
+        if jarak_supply < 3:
+            pesan_alarm = f"⚠️ DOT UDAH DEKET SUPPLY {supply_kuat['high']:.3f} - SIAP-SIAP JUAL / JANGAN FOMO!"
+            warna_alarm = "red"
+    if demand_kuat is not None and pesan_alarm == "":
+        jarak_demand = (harga_skrg - demand_kuat['low']) / harga_skrg * 100
+        if jarak_demand < 3:
+            pesan_alarm = f"🔥 DOT UDAH DEKET DEMAND {demand_kuat['low']:.3f} - SIAP-SIAP SEROK!"
+            warna_alarm = "green"
+    if pesan_alarm != "":
+        fig.add_annotation(x=df["time"].iloc[-1], y=harga_skrg, text=pesan_alarm, showarrow=True, arrowhead=2, font=dict(color="white", size=12), bgcolor=warna_alarm)
     fig.add_trace(go.Scatter(x=df["time"], y=df["close"], mode='lines', name='Harga', line=dict(color='black')))
     fig.add_hrect(y0=rendah_20, y1=tinggi_demand, fillcolor="green", opacity=0.35, line_width=0)
     fig.add_hrect(y0=rendah_supply, y1=tinggi_20, fillcolor="red", opacity=0.35, line_width=0) 
