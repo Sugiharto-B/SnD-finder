@@ -56,7 +56,7 @@ def ambil_data(symbol, interval, limit):
         df_y.columns = [c.lower() for c in df_y.columns]
         df_y = df_y.loc[:, ~df_y.columns.duplicated()]
         df_y = df_y.reset_index()
-        df_y.rename(columns={"datetime": "time", "date": "time"}, inplace=True)
+        df_y.rename(columns={"Datetime": "time", "Date": "time"}, inplace=True)
         return df_y
             
 
