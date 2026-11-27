@@ -20,7 +20,7 @@ jumlah = st.slider("Jumlah Candle:", 50, 500, 200)
 
 @st.cache_data(ttl=60)
 def ambil_data(symbol, interval, limit):
-    url = f"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&limit={limit}"
+    url = f"https://data-api.binance.vision/api/v3/klines?symbol={symbol}&interval={interval}&limit={limit}"
     r = requests.get(url, timeout=10)
     data = r.json()
     df = pd.DataFrame(data, columns=["open_time","open","high","low","close","volume","close_time","qav","trades","taker_base","taker_quote","ignore"])
