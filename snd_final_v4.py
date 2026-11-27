@@ -87,8 +87,8 @@ try:
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=df["time"], y=df["close"], mode='lines', name='Harga', line=dict(color='black')))
-    ara.add_hrect(y0=rendah_20, y1=tinggi_demand, fillcolor="green", opacity=0.35, line_width=0)
-    ara.add_hrect(y0=rendah_supply, y1=tinggi_20, fillcolor="red", opacity=0.35, line_width=0) 
+    fig.add_hrect(y0=rendah_20, y1=tinggi_demand, fillcolor="green", opacity=0.35, line_width=0)
+    fig.add_hrect(y0=rendah_supply, y1=tinggi_20, fillcolor="red", opacity=0.35, line_width=0) 
     fig.add_hline(y=harga_now, line_dash="dash", line_color="yellow")
     fig.update_layout(template="plotly_dark", height=400)
     st.plotly_chart(fig, use_container_width=True)
