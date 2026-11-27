@@ -91,7 +91,7 @@ try:
     df_100['swing_low'] = df_100['low'] == df_100['low'].rolling(11, center=True).min()
     swing_lows = df_100[df_100['swing_low'] == True]
     # Ambil Swing Low terakhir yang masih fresh (harga belum jebol ke bawahnya)
-        demand_kuat = None
+    demand_kuat = None
     for i in range(len(swing_lows)-1, -1, -1):
         low_c = swing_lows.iloc[i]['low']
         # Cek apakah harga sekarang masih di atas low ini (belum jebol)
