@@ -92,17 +92,17 @@ try:
     # Garis tengah antara Demand & Supply
     fig.add_trace(go.Scatter(x=[df["time"].iloc[0], df["time"].iloc[-1]], y=[(tinggi_demand + rendah_supply)/2, (tinggi_demand + rendah_supply)/2], mode="lines", line=dict(color="black", dash="dash", width=2), name="Tengah"))
 # Split lines Demand to Mid
-mid = (tinggi_demand + rendah_supply) / 2
-d1 = tinggi_demand + (mid - tinggi_demand) * 1/3
-d2 = tinggi_demand + (mid - tinggi_demand) * 2/3
-fig.add_trace(go.Scatter(x=[df["time"].iloc[0], df["time"].iloc[-1]], y=[d1, d1], mode="lines", line=dict(color="green", dash="dot", width=1), showlegend=False))
-fig.add_trace(go.Scatter(x=[df["time"].iloc[0], df["time"].iloc[-1]], y=[d2, d2], mode="lines", line=dict(color="green", dash="dot", width=1), showlegend=False))
+
+    d1 = tinggi_demand + (tengah - tinggi_demand) * 1/3
+    d2 = tinggi_demand + (tengah - tinggi_demand) * 2/3
+    fig.add_trace(go.Scatter(x=[df["time"].iloc[0], df["time"].iloc[-1]], y=[d1, d1], mode="lines", line=dict(color="green", dash="dot", width=1), showlegend=False))
+    fig.add_trace(go.Scatter(x=[df["time"].iloc[0], df["time"].iloc[-1]], y=[d2, d2], mode="lines", line=dict(color="green", dash="dot", width=1), showlegend=False))
 
 # Split lines Mid to Supply
-s1 = mid + (rendah_supply - mid) * 1/3
-s2 = mid + (rendah_supply - mid) * 2/3
-fig.add_trace(go.Scatter(x=[df["time"].iloc[0], df["time"].iloc[-1]], y=[s1, s1], mode="lines", line=dict(color="#2ca02c", dash="dot", width=1), showlegend=False))
-fig.add_trace(go.Scatter(x=[df["time"].iloc[0], df["time"].iloc[-1]], y=[s2, s2], mode="lines", line=dict(color="#2ca02c", dash="dot", width=1), showlegend=False))# Segitiga kuning harga sekarang
+    s1 = tengah + (rendah_supply - tengah) * 1/3
+    s2 = tengah + (rendah_supply - tengah) * 2/3
+    fig.add_trace(go.Scatter(x=[df["time"].iloc[0], df["time"].iloc[-1]], y=[s1, s1], mode="lines", line=dict(color="#2ca02c", dash="dot", width=1), showlegend=False))
+    fig.add_trace(go.Scatter(x=[df["time"].iloc[0], df["time"].iloc[-1]], y=[s2, s2], mode="lines", line=dict(color="#2ca02c", dash="dot", width=1), showlegend=False))# Segitiga kuning harga sekarang
     fig.add_trace(go.Scatter(x=[df["time"].iloc[-1]], y=[harga_now], mode="markers", marker=dict(symbol="triangle-right", size=18, color="yellow", line=dict(color="black", width=1)), name="Harga Sekarang"))
 
     fig.update_layout(template="plotly_dark", height=400)
