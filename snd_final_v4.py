@@ -8,9 +8,13 @@ st.title("📊 Pencari SnD + Pivot")
 st.caption("DOT • POL • EMAS (XAU) - Tanpa Iklan - by Sugiharto-B")
 
 # PILIHAN ASET
-pilihan = st.selectbox("Pilih Aset:", ["DOT / USDT", "POL / USDT", "EMAS / XAUUSDT"])
-symbol_map = {"DOT / USDT": "DOTUSDT", "POL / USDT": "POLUSDT", "EMAS / XAUUSDT": "XAUUSDT"}
-symbol = symbol_map[pilihan]
+pilihan = st.selectbox("Pilih Aset:", ["DOT / USDT", "POL / USDT", "EMAS (XAU) / USDT", "KETIK SENDIRI..."])
+symbol_map = {"DOT / USDT": "DOTUSDT", "POL / USDT": "POLUSDT", "EMAS (XAU) / USDT": "PAXGUSDT"}
+if pilihan == "KETIK SENDIRI...":
+    kode_ketik = st.text_input("Ketik Kode Koin (contoh: SOL, XRP, DOGE):", value="SOL").upper()
+    symbol = kode_ketik + "USDT"
+else:
+    symbol = symbol_map[pilihan]
 
 tf = st.selectbox("Timeframe:", ["1h", "4h", "1d"], index=1)
 tf_map = {"1h": "1h", "4h": "4h", "1d": "1d"}
