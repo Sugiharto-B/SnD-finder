@@ -1,4 +1,4 @@
-import streamlit as st
+eimport streamlit as st
 import requests
 import pandas as pd
 import numpy as np
@@ -94,8 +94,6 @@ try:
 # Segitiga kuning harga sekarang
     fig.add_trace(go.Scatter(x=[df["time"].iloc[-1]], y=[harga_now], mode="markers", marker=dict(symbol="triangle-right", size=18, color="yellow", line=dict(color="black", width=1)), name="Harga Sekarang"))
 
-# Segitiga kuning harga sekarang
-    fig.add_trace(go.Scatter(x=[df['datetime'].iloc[-1]], y=[harga_sekarang], mode="markers", marker=dict(symbol="triangle-right", size=18, color="yellow", line=dict(color="black", width=1)), name="Harga Sekarang"))
     fig.update_layout(template="plotly_dark", height=400)
     st.plotly_chart(fig, use_container_width=True)
 
