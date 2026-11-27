@@ -59,15 +59,6 @@ def ambil_data(symbol, interval, limit):
         return df_y
             
 
-        df_y = yf.download(symbol_yahoo, period="max", interval=interval, progress=False)
-        df_y = df_y.tail(int(limit))
-        # Bikin kolomnya sama kayak Binance biar gak error di bawah
-        df_y.columns = [c[0] if isinstance(c, tuple) else c for c in df_y.columns]
-        df_y.columns = [c.lower() for c in df_y.columns]
-        df_y = df_y.reset_index()
-        df_y.rename(columns={"datetime": "time", "date": "time"}, inplace=True)
-        return df_y
-    return df
 
 try:
     df = ambil_data(symbol, interval, jumlah)
