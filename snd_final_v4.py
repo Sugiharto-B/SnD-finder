@@ -73,12 +73,12 @@ def cari_zona(df):
     return demand_zones, supply_zones
 
 demand_zones, supply_zones = cari_zona(df)
-rendah_20, tinggi_demand = demand_zones[-1] if demand_zones else (df['rendah'].min(), df['rendah'].min())
-rendah_supply, tinggi_20 = supply_zones[-1] if supply_zones else (df['tinggi'].max(), df['tinggi'].max())
+    rendah_20, tinggi_demand = demand_zones[-1] if demand_zones else (df['rendah'].min(), df['rendah'].min())
+    rendah_supply, tinggi_20 = supply_zones[-1] if supply_zones else (df['tinggi'].max(), df['tinggi'].max())
 
-jarak_ke_demand = (harga_sekarang - tinggi_demand)
-jarak_ke_supply = (rendah_supply - harga_sekarang)
-st.informasi(f"Jarak Harga ke Demand:{jarak_ke_demand}")
+    jarak_ke_demand = (harga_sekarang - tinggi_demand)
+    jarak_ke_supply = (rendah_supply - harga_sekarang)
+    st.informasi(f"Jarak Harga ke Demand:{jarak_ke_demand}")
 
     if abs(harga_now - pivot) < (H-L)*0.05:
         st.warning("⚠️ Harga sedang di area PIVOT - Hati-hati, biasanya mantul / jebol!")
