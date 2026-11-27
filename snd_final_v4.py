@@ -69,8 +69,8 @@ try:
             demand_zones.append((base['rendah'].min(), base['tinggi'].max()))
         if is_down and base_kecil:
             supply_zones.append((base['rendah'].min(), base['tinggi'].max()))
-    rendah_20, tinggi_demand = demand_zones[-1] if demand_zones else (df['rendah'].min(), df['rendah'].min())
-    rendah_supply, tinggi_20 = supply_zones[-1] if supply_zones else (df['tinggi'].max(), df['tinggi'].max()) 
+        rendah_20, tinggi_demand = demand_zones[-1] if demand_zones else (df['rendah'].min(), df['rendah'].min())
+        rendah_supply, tinggi_20 = supply_zones[-1] if supply_zones else (df['tinggi'].max(), df['tinggi'].max()) 
 
     if abs(harga_now - pivot) < (H-L)*0.05:
         st.warning("⚠️ Harga sedang di area PIVOT - Hati-hati, biasanya mantul / jebol!")
