@@ -1,3 +1,4 @@
+import yfinance as yf
 import streamlit as st
 import requests
 import pandas as pd
@@ -29,13 +30,43 @@ jumlah = st.slider("Jumlah Candle:", 50, 500, 200)
 
 @st.cache_data(ttl=60)
 def ambil_data(symbol, interval, limit):
-    url = f"https://data-api.binance.vision/api/v3/klines?symbol={symbol}&interval={interval}&limit={limit}"
-    r = requests.get(url, timeout=10)
-    data = r.json()
-    df = pd.DataFrame(data, columns=["open_time","open","high","low","close","volume","close_time","qav","trades","taker_base","taker_quote","ignore"])
-    for c in ["open","high","low","close","volume"]:
-        df[c] = pd.to_numeric(df[c])
-    df["time"] = pd.to_datetime(df["open_time"], unit="ms")
+    # KALO PILIH BINANCE -> PAKE KODE LAMA LU (UDAH JALAN)
+    if "Binance" in sumber_data:
+        url = f"https://data-api.binance.vision/api/v3/klines?symbol={symbol}&interval={interval}&limit={limit}"
+        r = requests.get(url, timeout=10)
+        data = r.json()
+        df = pd.DataFrame(data, columns=["open_time","open","high","low","close","volume","close_time","quote_volume","trades","taker_buy_base","taker_buy_quote","ignore"])
+        for c in ["open","high","low","close","volume"]:
+            df[c] = pd.to_numeric(df[c])
+        df["time"] = pd.to_datetime(df["open_time"], unit="ms")
+        return df
+
+    # KALO PILIH YAHOO -> PAKE YAHOO, BIAR BISA BANDINGIN USD vs USDT
+    else:
+        # BTC di Yahoo namanya BTC-USD, bukan BTCUSDT
+        kode_bersih = symbol.replace("USDT", "")
+        if kode_bersih in ["BTC", "ETH"]:
+            symbol_yahoo = f"{kode_bersih}-USD"
+        else:
+                    symbol_yahoo = f"{kode_bersih}-USD"
+
+        df_y = yf.download(symbol_yahoo, period="max", interval=interval, progress=False)
+        df_y = df_y.tail(int(limit))
+        df_y.columns = [c[0] if isinstance(c, tuple) else c for c in df_y.columns]
+        df_y.columns = [c.lower() for c in df_y.columns]
+        df_y = df_y.reset_index()
+        df_y.rename(columns={"datetime": "time", "date": "time"}, inplace=True)
+        return df_y
+            
+
+        df_y = yf.download(symbol_yahoo, period="max", interval=interval, progress=False)
+        df_y = df_y.tail(int(limit))
+        # Bikin kolomnya sama kayak Binance biar gak error di bawah
+        df_y.columns = [c[0] if isinstance(c, tuple) else c for c in df_y.columns]
+        df_y.columns = [c.lower() for c in df_y.columns]
+        df_y = df_y.reset_index()
+        df_y.rename(columns={"datetime": "time", "date": "time"}, inplace=True)
+        return df_y
     return df
 
 try:
