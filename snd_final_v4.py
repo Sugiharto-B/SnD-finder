@@ -54,32 +54,23 @@ try:
 
     # SUPPLY & DEMAND SEDERHANA
     st.subheader("📦 Zona Supply & Demand Terdekat")
-    # === SnD BENERAN - Zona Otomatis dari Candle Base ===
+       # === SnD BENERAN TANPA DEF ===
     df['body'] = df['tutup'] - df['membuka']
     df['body'] = df['body'].abs()
     avg_body = df['body'].mean()
-
-    def cari_zona(df):
     demand_zones = []
     supply_zones = []
     for i in range(3, len(df)-1):
-        is_up = df['menutup'].iloc[i] > df['membuka'].iloc[i] and df['body'].iloc[i] > 1.5 * avg_body
-        is_down = df['menutup'].iloc[i] < df['membuka'].iloc[i] and df['body'].iloc[i] > 1.5 * avg_body
+        is_up = df['tutup'].iloc[i] > df['membuka'].iloc[i] and df['body'].iloc[i] > 1.5 * avg_body
+        is_down = df['tutup'].iloc[i] < df['membuka'].iloc[i] and df['body'].iloc[i] > 1.5 * avg_body
         base = df.iloc[i-3:i]
         base_kecil = (base['body'] < avg_body).all()
         if is_up and base_kecil:
             demand_zones.append((base['rendah'].min(), base['tinggi'].max()))
         if is_down and base_kecil:
             supply_zones.append((base['rendah'].min(), base['tinggi'].max()))
-    return demand_zones, supply_zones
-
-demand_zones, supply_zones = cari_zona(df)
     rendah_20, tinggi_demand = demand_zones[-1] if demand_zones else (df['rendah'].min(), df['rendah'].min())
-    rendah_supply, tinggi_20 = supply_zones[-1] if supply_zones else (df['tinggi'].max(), df['tinggi'].max())
-
-    jarak_ke_demand = (harga_sekarang - tinggi_demand)
-    jarak_ke_supply = (rendah_supply - harga_sekarang)
-    st.informasi(f"Jarak Harga ke Demand:{jarak_ke_demand}")
+    rendah_supply, tinggi_20 = supply_zones[-1] if supply_zones else (df['tinggi'].max(), df['tinggi'].max()) 
 
     if abs(harga_now - pivot) < (H-L)*0.05:
         st.warning("⚠️ Harga sedang di area PIVOT - Hati-hati, biasanya mantul / jebol!")
