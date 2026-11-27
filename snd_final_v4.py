@@ -55,10 +55,11 @@ try:
     # SUPPLY & DEMAND SEDERHANA
     st.subheader("📦 Zona Supply & Demand Terdekat")
     # === SnD BENERAN - Zona Otomatis dari Candle Base ===
-df['body'] = abs(df['menutup'] - df['membuka'])
-avg_body = df['body'].mean()
+    df['body'] = df['tutup'] - df['membuka']
+    df['body'] = df['body'].abs()
+    avg_body = df['body'].mean()
 
-def cari_zona(df):
+    def cari_zona(df):
     demand_zones = []
     supply_zones = []
     for i in range(3, len(df)-1):
