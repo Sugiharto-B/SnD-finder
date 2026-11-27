@@ -6,7 +6,12 @@ import plotly.graph_objects as go
 st.set_page_config(page_title="Pencari SnD", page_icon="📊", layout="wide")
 st.title("📊 Pencari SnD + Pivot")
 st.caption("DOT • POL • EMAS (XAU) - Tanpa Iklan - by Sugiharto-B")
-
+# PILIHAN SUMBER DATA - BARU
+sumber_data = st.selectbox(
+    "Sumber Data:",
+    ["Binance - USDT (Sama kayak Binance)",
+     "Yahoo Finance - USD (Buat bandingin)"]
+)
 # PILIHAN ASET
 pilihan = st.selectbox("Pilih Aset:", ["DOT / USDT", "POL / USDT", "EMAS (XAU) / USDT", "KETIK SENDIRI..."])
 symbol_map = {"DOT / USDT": "DOTUSDT", "POL / USDT": "POLUSDT", "EMAS (XAU) / USDT": "PAXGUSDT"}
