@@ -76,7 +76,7 @@ try:
     st.subheader("📈 Grafik Harga Terakhir + Zona SnD")
 
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df["time"], y=df["close"], mode='lines', name='Harga', line=dict(color='white')))
+    fig.add_trace(go.Scatter(x=df["time"], y=df["close"], mode='lines', name='Harga', line=dict(color='black')))
     fig.add_hrect(y0=low_20, y1=low_20*1.01, fillcolor="green", opacity=0.35, line_width=0, annotation_text="DEMAND")
     fig.add_hrect(y0=high_20*0.99, y1=high_20, fillcolor="red", opacity=0.35, line_width=0, annotation_text="SUPPLY")
     fig.add_hline(y=harga_now, line_dash="dash", line_color="yellow")
